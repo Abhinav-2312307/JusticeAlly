@@ -66,14 +66,14 @@ export function SiteHeader() {
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   <ListItem
-                    href="/resources/rights-guide"
+                    href="https://know-your-right-lib.vercel.app/"
                     title="Know Your Rights"
                     icon={<Info className="h-4 w-4 mr-2" />}
                   >
                     Comprehensive guides on legal rights for citizens
                   </ListItem>
                   <ListItem
-                    href="/resources/legal-library"
+                    href="https://know-your-right-lib.vercel.app/"
                     title="Legal Library"
                     icon={<BookOpen className="h-4 w-4 mr-2" />}
                   >
