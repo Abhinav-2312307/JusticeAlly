@@ -6,10 +6,11 @@ import { getOptionalSessionUser } from "@/lib/auth"
 import { getSetupSummary } from "@/lib/env"
 import { legalAidResources, legalDocuments } from "@/lib/legal/library"
 import { documentTemplates } from "@/lib/legal/templates"
-import { getKnowledgeBaseStatus } from "@/lib/rag/retrieval"
+import { getLocalKnowledgeBaseStatus } from "@/lib/rag/retrieval"
 
 export default async function HomePage() {
-  const [knowledgeStatus, user] = await Promise.all([getKnowledgeBaseStatus(), getOptionalSessionUser()])
+  const [user] = await Promise.all([getOptionalSessionUser()])
+  const knowledgeStatus = getLocalKnowledgeBaseStatus()
   const setup = getSetupSummary()
 
   const featureCards = [

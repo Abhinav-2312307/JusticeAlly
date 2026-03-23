@@ -84,6 +84,14 @@ export async function getKnowledgeBaseStatus() {
   }
 }
 
+export function getLocalKnowledgeBaseStatus() {
+  return {
+    mode: "local",
+    documentCount: localCorpus.length,
+    chunkCount: localChunks.length,
+  }
+}
+
 export async function retrieveRelevantKnowledge(query: string, limit = 5): Promise<RetrievedChunk[]> {
   const storedChunks = await listKnowledgeChunks()
   const sourceChunks = storedChunks.length > 0 ? storedChunks : localChunks

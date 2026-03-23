@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowRight, BookOpenText, FileText, MessageSquare, ShieldCheck } from "lucide-react"
 import { requireSessionUser } from "@/lib/auth"
 import { getUserProfile, listUserArtifacts, listUserConversations, listUserDocuments, upsertUserProfile } from "@/lib/db"
-import { getKnowledgeBaseStatus } from "@/lib/rag/retrieval"
+import { getLocalKnowledgeBaseStatus } from "@/lib/rag/retrieval"
 import { getSetupSummary } from "@/lib/env"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,13 +24,13 @@ function formatDate(value: string) {
 export default async function WorkspacePage() {
   const user = await requireSessionUser("/workspace")
   await upsertUserProfile(user)
+  const knowledgeStatus = getLocalKnowledgeBaseStatus()
 
-  const [profile, conversations, artifacts, documents, knowledgeStatus] = await Promise.all([
+  const [profile, conversations, artifacts, documents] = await Promise.all([
     getUserProfile(user),
     listUserConversations(user.uid),
     listUserArtifacts(user.uid),
     listUserDocuments(user.uid),
-    getKnowledgeBaseStatus(),
   ])
 
   const setup = getSetupSummary()
