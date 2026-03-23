@@ -1,55 +1,71 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { z } from "zod"
+import { getOptionalSessionUser } from "@/lib/auth"
+import { getConversationMessages } from "@/lib/db"
+import { answerLegalQuestion } from "@/lib/legal/services"
 
-// Gemini API endpoint for the 2.0-flash model
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-const API_KEY = "AIzaSyAG3hpw2yL_6zwN4yJVoeSuomwrp1s_-CU"
+const requestSchema = z.object({
+  query: z.string().min(3).max(5000),
+  conversationId: z.string().optional(),
+  issueType: z.string().optional(),
+  urgency: z.string().optional(),
+})
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  const user = await getOptionalSessionUser()
+
+  if (!user) {
+    return NextResponse.json({ error: "Please log in to use the legal assistant." }, { status: 401 })
+  }
+
   try {
-    const { query } = await request.json()
-
-    if (!query) {
-      return NextResponse.json({ error: "No query provided" }, { status: 400 })
-    }
-
-    // Prepare the prompt for Gemini with legal context
-    const systemPrompt =
-      "You are JusticeAlly, an AI legal assistant. Provide helpful, accurate, and concise legal information in a clean, professional format. " +
-      "Do not use asterisks, bold formatting, or excessive disclaimers. Present information in a straightforward manner with proper paragraphing and minimal formatting. " +
-      "Include only a brief, single-line disclaimer at the end if necessary. Focus on explaining legal concepts in simple terms and providing direct, actionable information."
-
-    // Call Gemini API
-    const response = await fetch(`${GEMINI_API_URL}?key=${API_KEY}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: systemPrompt }, { text: query }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          topP: 0.95,
-          maxOutputTokens: 2048, // Increased token limit for document simplification
-        },
-      }),
+    const body = requestSchema.parse(await request.json())
+    const result = await answerLegalQuestion({
+      userId: user.uid,
+      query: body.query,
+      conversationId: body.conversationId,
+      issueType: body.issueType ?? "general",
+      urgency: body.urgency ?? "normal",
     })
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      console.error("Gemini API error:", errorData)
-      return NextResponse.json({ error: "Failed to get response from AI" }, { status: 500 })
-    }
-
-    const data = await response.json()
-    const aiResponse = data.candidates[0].content.parts[0].text
-
-    return NextResponse.json({ response: aiResponse })
+    return NextResponse.json({
+      response: result.answer,
+      conversationId: result.conversationId,
+      sources: result.sources,
+    })
   } catch (error) {
-    console.error("Error in chat API:", error)
-    return NextResponse.json({ error: "Failed to process request" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Could not process the legal query.",
+      },
+      { status: 400 },
+    )
+  }
+}
+
+export async function GET(request: Request) {
+  const user = await getOptionalSessionUser()
+
+  if (!user) {
+    return NextResponse.json({ error: "Please log in to view conversation history." }, { status: 401 })
+  }
+
+  const { searchParams } = new URL(request.url)
+  const conversationId = searchParams.get("conversationId")
+
+  if (!conversationId) {
+    return NextResponse.json({ error: "Missing conversationId." }, { status: 400 })
+  }
+
+  try {
+    const messages = await getConversationMessages(user.uid, conversationId, 30)
+    return NextResponse.json({ messages })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Could not load the conversation.",
+      },
+      { status: 400 },
+    )
   }
 }

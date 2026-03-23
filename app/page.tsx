@@ -1,252 +1,252 @@
 import Link from "next/link"
+import { ArrowRight, BookOpenText, FileText, ShieldCheck, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Mic, FileText, MessageSquare, AlertTriangle, BookOpen, Globe } from "lucide-react"
-import { HeroSection } from "@/components/hero-section"
-import { FeatureCard } from "@/components/feature-card"
-import { TestimonialSection } from "@/components/testimonial-section"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { getOptionalSessionUser } from "@/lib/auth"
+import { getSetupSummary } from "@/lib/env"
+import { legalAidResources, legalDocuments } from "@/lib/legal/library"
+import { documentTemplates } from "@/lib/legal/templates"
+import { getKnowledgeBaseStatus } from "@/lib/rag/retrieval"
 
-export default function Home() {
+export default async function HomePage() {
+  const [knowledgeStatus, user] = await Promise.all([getKnowledgeBaseStatus(), getOptionalSessionUser()])
+  const setup = getSetupSummary()
+
+  const featureCards = [
+    {
+      title: "AI Lawyer",
+      description: "A cleaner assistant UI with retrieval-backed legal guidance, saved threads, and JSON export.",
+      href: "/tools/legal-assistant",
+      cta: "Open assistant",
+    },
+    {
+      title: "Document Chat",
+      description: "Attach PDFs, DOCX, JSON, or text files, generate a legal brief, and continue the conversation.",
+      href: "/tools/document-simplifier",
+      cta: "Analyze documents",
+    },
+    {
+      title: "Draft Studio",
+      description: "Generate FIR-style complaints, RTIs, legal notices, and workplace complaints from structured facts.",
+      href: "/tools/document-generator",
+      cta: "Generate draft",
+    },
+    {
+      title: "Rights + Directory",
+      description: "Browse legal resources, rights summaries, and aid channels with AI handoff into the assistant.",
+      href: "/resources/legal-library",
+      cta: "Browse library",
+    },
+  ]
+
+  const flowSteps = [
+    {
+      title: "Understand the issue",
+      description: "Use the AI lawyer and rights library to frame the matter, urgency, and evidence checklist.",
+    },
+    {
+      title: "Analyze documents",
+      description: "Upload legal files, generate a plain-language brief, and ask follow-up questions from the same document set.",
+    },
+    {
+      title: "Draft the next move",
+      description: "Turn facts into a first-pass FIR complaint, RTI request, notice, or workplace complaint.",
+    },
+    {
+      title: "Keep the record",
+      description: "Persist threads, artifacts, and uploaded files in the workspace for later follow-up.",
+    },
+  ]
+
   return (
-    <main className="flex min-h-screen flex-col">
-      <HeroSection />
+    <main className="space-y-14 pb-14 md:space-y-20 md:pb-20">
+      <section className="page-section pb-0">
+        <div className="container-shell">
+          <div className="glass-panel overflow-hidden border-white/70 bg-[linear-gradient(135deg,rgba(20,72,61,0.98),rgba(50,32,17,0.94))] p-8 text-white md:p-12">
+            <div className="grid gap-10 xl:grid-cols-[1.08fr_0.92fr]">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-white/80">
+                  <Sparkles className="h-4 w-4" />
+                  Full legal guidance workspace
+                </div>
+                <h1 className="mt-6 max-w-4xl font-display text-5xl font-semibold leading-[1.02] md:text-7xl">
+                  JusticeAlly turns legal confusion into guided action.
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/78 md:text-lg">
+                  Start from a landing page, sign in with email or Google, use a retrieval-backed AI lawyer, chat with
+                  legal documents, generate structured drafts like FIR complaints and RTIs, and keep everything tied to one
+                  workspace.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Button asChild size="lg">
+                    <Link href={user ? "/workspace" : "/signup"}>
+                      {user ? "Open workspace" : "Create workspace"}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" asChild className="border-white/20 bg-white/10 text-white hover:bg-white/15 hover:text-white">
+                    <Link href="/resources/legal-library">Browse legal library</Link>
+                  </Button>
+                </div>
+              </div>
 
-      {/* Features Section */}
-      <section className="container py-12 md:py-24">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">Key Features</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            JusticeAlly provides comprehensive legal assistance through AI-powered tools designed for everyone.
-          </p>
-        </div>
+              <div className="grid gap-4">
+                <Card className="border-white/15 bg-white/10 text-white">
+                  <CardHeader>
+                    <CardTitle>Platform snapshot</CardTitle>
+                    <CardDescription className="text-white/70">What the current build is wired to support.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-3 text-sm text-white/78 sm:grid-cols-2">
+                    <p>Knowledge mode: {knowledgeStatus.mode}</p>
+                    <p>Corpus documents: {legalDocuments.length}</p>
+                    <p>Template types: {documentTemplates.length}</p>
+                    <p>Directory resources: {legalAidResources.length}</p>
+                  </CardContent>
+                </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FeatureCard
-            icon={<Mic className="h-8 w-8 text-primary" />}
-            title="Voice-Based Legal Assistant"
-            description="Speak or type your legal issue and receive immediate guidance on your rights and next steps."
-          />
-          <FeatureCard
-            icon={<FileText className="h-8 w-8 text-primary" />}
-            title="Document Simplification"
-            description="Upload complex legal documents and get simplified summaries in plain language."
-          />
-          <FeatureCard
-            icon={<MessageSquare className="h-8 w-8 text-primary" />}
-            title="Legal Q&A System"
-            description="Ask questions about legal matters and receive accurate, contextual answers."
-          />
-          <FeatureCard
-            icon={<AlertTriangle className="h-8 w-8 text-primary" />}
-            title="Emergency Guidance"
-            description="Get real-time assistance during legal emergencies with step-by-step instructions."
-          />
-          <FeatureCard
-            icon={<BookOpen className="h-8 w-8 text-primary" />}
-            title="Document Generator"
-            description="Generate legal documents, complaints, and FIRs based on your specific situation."
-          />
-          <FeatureCard
-            icon={<Globe className="h-8 w-8 text-primary" />}
-            title="Multilingual Support"
-            description="Access legal help in multiple languages including Hindi, English, and regional languages."
-          />
-        </div>
-      </section>
+                <Card className="border-white/15 bg-white/10 text-white">
+                  <CardHeader>
+                    <CardTitle>Readiness</CardTitle>
+                    <CardDescription className="text-white/70">Env visibility from the landing page.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-3 text-sm text-white/78 sm:grid-cols-2">
+                    <p>Gemini: {setup.hasGeminiConfig ? "configured" : "missing"}</p>
+                    <p>Firebase client: {setup.hasFirebaseClientConfig ? "configured" : "missing"}</p>
+                    <p>Firebase admin: {setup.hasFirebaseAdminConfig ? "configured" : "missing"}</p>
+                    <p>MongoDB: {setup.hasMongoConfig ? "configured" : "missing"}</p>
+                    <p>Session secret: {setup.hasSessionSecret ? "configured" : "missing"}</p>
+                    <p>Cloudinary: {setup.hasCloudinaryConfig ? "configured" : "missing"}</p>
+                  </CardContent>
+                </Card>
 
-      {/* Use Cases Section */}
-      <section className="bg-slate-50 py-12 md:py-24">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight mb-4">Real-World Use Cases</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              See how JusticeAlly can help in various legal situations.
-            </p>
+                <div className="rounded-3xl border border-white/15 bg-white/10 p-6">
+                  <p className="text-xs uppercase tracking-[0.18em] text-white/65">Scope</p>
+                  <p className="mt-3 text-lg leading-7 text-white/85">
+                    Built for Indian legal guidance and first-step drafting. High-stakes action still needs case-specific review
+                    from a licensed advocate.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <Tabs defaultValue="tenant" className="max-w-4xl mx-auto">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
-              <TabsTrigger value="tenant">Tenant Issues</TabsTrigger>
-              <TabsTrigger value="employment">Employment</TabsTrigger>
-              <TabsTrigger value="freelance">Freelancers</TabsTrigger>
-              <TabsTrigger value="students">Students</TabsTrigger>
-              <TabsTrigger value="harassment">Harassment</TabsTrigger>
-            </TabsList>
-            <TabsContent value="tenant" className="p-6 bg-white rounded-lg shadow-sm">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Tenant Harassment</CardTitle>
-                  <CardDescription>How JusticeAlly helps tenants facing issues with landlords</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>When facing harassment from a landlord, JusticeAlly can:</p>
-                  <ul className="list-disc pl-6 mt-2 space-y-2">
-                    <li>Inform you about tenant rights under local housing laws</li>
-                    <li>Generate formal complaint letters to housing authorities</li>
-                    <li>Provide scripts for verbal confrontations</li>
-                    <li>Connect you with tenant rights organizations in your area</li>
-                    <li>Help document incidents for potential legal action</li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild>
-                    <Link href="/demo/tenant">Try Tenant Rights Demo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-            <TabsContent value="employment" className="p-6 bg-white rounded-lg shadow-sm">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Employment Contracts</CardTitle>
-                  <CardDescription>How JusticeAlly helps job seekers understand employment terms</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>When reviewing an employment contract, JusticeAlly can:</p>
-                  <ul className="list-disc pl-6 mt-2 space-y-2">
-                    <li>Simplify complex legal terminology in offer letters</li>
-                    <li>Highlight potentially problematic clauses</li>
-                    <li>Explain your rights as an employee</li>
-                    <li>Compare terms to industry standards</li>
-                    <li>Suggest negotiation points for better terms</li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild>
-                    <Link href="/demo/employment">Try Employment Contract Demo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-            <TabsContent value="freelance" className="p-6 bg-white rounded-lg shadow-sm">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Freelance Agreements</CardTitle>
-                  <CardDescription>How JusticeAlly helps freelancers with work agreements</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>When validating freelance work agreements, JusticeAlly can:</p>
-                  <ul className="list-disc pl-6 mt-2 space-y-2">
-                    <li>Review contract terms for payment and delivery schedules</li>
-                    <li>Identify intellectual property rights concerns</li>
-                    <li>Generate standard freelance agreements</li>
-                    <li>Explain tax implications of freelance work</li>
-                    <li>Provide guidance on non-payment issues</li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild>
-                    <Link href="/demo/freelance">Try Freelance Agreement Demo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-            <TabsContent value="students" className="p-6 bg-white rounded-lg shadow-sm">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Student Rights</CardTitle>
-                  <CardDescription>How JusticeAlly helps students understand institutional rules</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>When dealing with educational institutions, JusticeAlly can:</p>
-                  <ul className="list-disc pl-6 mt-2 space-y-2">
-                    <li>Explain student rights under education laws</li>
-                    <li>Help interpret university policies and regulations</li>
-                    <li>Generate appeals for academic decisions</li>
-                    <li>Provide guidance on discrimination or harassment cases</li>
-                    <li>Assist with scholarship or financial aid disputes</li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild>
-                    <Link href="/demo/student">Try Student Rights Demo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-            <TabsContent value="harassment" className="p-6 bg-white rounded-lg shadow-sm">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Harassment Cases</CardTitle>
-                  <CardDescription>How JusticeAlly helps victims of online or physical harassment</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>When facing harassment situations, JusticeAlly can:</p>
-                  <ul className="list-disc pl-6 mt-2 space-y-2">
-                    <li>Provide immediate steps to ensure safety</li>
-                    <li>Help draft police complaints or FIRs</li>
-                    <li>Connect with local support organizations</li>
-                    <li>Explain legal protections against harassment</li>
-                    <li>Guide through the process of obtaining restraining orders</li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button asChild>
-                    <Link href="/demo/harassment">Try Harassment Support Demo</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-          </Tabs>
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section className="container py-12 md:py-24">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">Try JusticeAlly</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Experience how JusticeAlly can help with your legal questions and document needs.
-          </p>
+      <section className="page-section py-0">
+        <div className="container-shell grid gap-6 lg:grid-cols-4">
+          {featureCards.map((feature) => (
+            <Card key={feature.title} className="glass-panel border-white/70">
+              <CardHeader>
+                <CardTitle className="text-2xl">{feature.title}</CardTitle>
+                <CardDescription>{feature.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full justify-between">
+                  <Link href={feature.href}>
+                    {feature.cta}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <Card>
+      <section className="page-section py-0">
+        <div className="container-shell">
+          <div className="grid gap-6 xl:grid-cols-[0.6fr_0.4fr]">
+            <Card className="glass-panel border-white/70">
+              <CardHeader>
+                <CardTitle className="text-3xl">How the user flow works now</CardTitle>
+                <CardDescription>Designed as one connected product instead of separate disconnected pages.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4 md:grid-cols-2">
+                {flowSteps.map((step, index) => (
+                  <div key={step.title} className="rounded-3xl border border-white/80 bg-white/85 p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Step {index + 1}</p>
+                    <p className="mt-2 text-xl font-semibold text-foreground">{step.title}</p>
+                    <p className="mt-3 text-sm leading-7 text-muted-foreground">{step.description}</p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="glass-panel border-white/70">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                  <ShieldCheck className="h-5 w-5 text-primary" />
+                  What changed
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm leading-7 text-muted-foreground">
+                <p>Phone-number sign-in is no longer part of the auth flow. Access is handled through email-password and Google only.</p>
+                <p>The assistant now supports saved thread loading, better source visibility, and JSON export.</p>
+                <p>The old simplifier has been upgraded into a document-chat workspace with multi-file attachments and follow-up Q&A.</p>
+                <p>The drafting tool now better surfaces FIR/RTI/legal notice flows and connects back into the assistant when facts need cleanup.</p>
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <Button asChild variant="outline">
+                    <Link href="/login">Log in</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href="/workspace">Open workspace</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section py-0">
+        <div className="container-shell grid gap-6 lg:grid-cols-3">
+          <Card className="glass-panel border-white/70">
             <CardHeader>
-              <CardTitle>Document Simplification</CardTitle>
-              <CardDescription>Upload a legal document to get a simplified summary</CardDescription>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <BookOpenText className="h-5 w-5 text-primary" />
+                Rights Library
+              </CardTitle>
+              <CardDescription>Search the same knowledge base that powers legal retrieval.</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center">
-              <Button asChild size="lg" className="w-full">
-                <Link href="/tools/document-simplifier">
-                  <FileText className="mr-2 h-5 w-5" />
-                  Try Document Simplifier
-                </Link>
+            <CardContent>
+              <Button asChild>
+                <Link href="/resources/legal-library">Browse library</Link>
               </Button>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="glass-panel border-white/70">
             <CardHeader>
-              <CardTitle>Legal Assistant</CardTitle>
-              <CardDescription>Ask questions or describe your legal situation</CardDescription>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <FileText className="h-5 w-5 text-primary" />
+                Document Workflows
+              </CardTitle>
+              <CardDescription>Summaries, document chat, generated drafts, and stored outputs live under one account.</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center">
-              <Button asChild size="lg" className="w-full">
-                <Link href="/tools/legal-assistant">
-                  <MessageSquare className="mr-2 h-5 w-5" />
-                  Try Legal Assistant
-                </Link>
+            <CardContent className="flex gap-3">
+              <Button asChild variant="outline">
+                <Link href="/tools/document-simplifier">Document chat</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/tools/document-generator">Draft studio</Link>
               </Button>
             </CardContent>
           </Card>
-        </div>
-      </section>
 
-      {/* Testimonials */}
-      <TestimonialSection />
-
-      {/* CTA Section */}
-      <section className="bg-primary text-primary-foreground py-16">
-        <div className="container text-center">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">Ready to Get Started?</h2>
-          <p className="max-w-2xl mx-auto mb-8">
-            Join thousands of users who have already benefited from JusticeAlly's AI-powered legal assistance.
-          </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/signup">Sign Up for Free</Link>
-          </Button>
+          <Card className="glass-panel border-white/70">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Sparkles className="h-5 w-5 text-primary" />
+                AI Guidance
+              </CardTitle>
+              <CardDescription>Move from public resources into the assistant with guided prompts and context handoff.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild>
+                <Link href="/tools/legal-assistant">Open AI lawyer</Link>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </main>

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "nalsa-directory",
+    "name": "National Legal Services Authority",
+    "category": "Legal aid",
+    "coverage": "National",
+    "contactLabel": "Official website",
+    "contactValue": "nalsa.gov.in",
+    "website": "https://nalsa.gov.in",
+    "notes": "Use the national and state legal services network to locate district legal aid bodies and institutional support."
+  },
+  {
+    "id": "cybercrime-portal",
+    "name": "National Cyber Crime Reporting Portal",
+    "category": "Cybercrime",
+    "coverage": "National",
+    "contactLabel": "Portal",
+    "contactValue": "cybercrime.gov.in",
+    "website": "https://cybercrime.gov.in",
+    "notes": "Useful for online fraud, harassment, non-consensual intimate image cases, and other cyber complaints."
+  },
+  {
+    "id": "emergency-112",
+    "name": "Emergency Response Support System",
+    "category": "Emergency",
+    "coverage": "National",
+    "contactLabel": "Phone",
+    "contactValue": "112",
+    "website": "",
+    "notes": "Use when there is immediate danger to life or physical safety."
+  },
+  {
+    "id": "women-helpline-181",
+    "name": "Women's Helpline",
+    "category": "Women and safety",
+    "coverage": "Many states and national support channels",
+    "contactLabel": "Phone",
+    "contactValue": "181",
+    "website": "",
+    "notes": "Useful for immediate support pathways in violence, abuse, and crisis situations."
+  },
+  {
+    "id": "women-police-1091",
+    "name": "Women Helpline / Police Support",
+    "category": "Women and safety",
+    "coverage": "Many states",
+    "contactLabel": "Phone",
+    "contactValue": "1091",
+    "website": "",
+    "notes": "Availability can vary by state; confirm the local response route if the number is redirected."
+  },
+  {
+    "id": "childline-1098",
+    "name": "Child Helpline",
+    "category": "Child protection",
+    "coverage": "National",
+    "contactLabel": "Phone",
+    "contactValue": "1098",
+    "website": "",
+    "notes": "Use for child safety, abuse, trafficking, or abandonment concerns."
+  },
+  {
+    "id": "cyber-helpline-1930",
+    "name": "Cyber Financial Fraud Helpline",
+    "category": "Cybercrime",
+    "coverage": "National",
+    "contactLabel": "Phone",
+    "contactValue": "1930",
+    "website": "",
+    "notes": "Use quickly in suspected cyber fraud or unauthorized financial transactions."
+  }
+]

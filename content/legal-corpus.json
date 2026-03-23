@@ -1,0 +1,123 @@
+[
+  {
+    "id": "constitutional-rights",
+    "title": "Fundamental rights and constitutional remedies",
+    "category": "Constitutional rights",
+    "jurisdiction": "India",
+    "sourceTitle": "Constitution of India, Articles 14 to 32",
+    "officialSource": "Constitution of India",
+    "tags": ["equality", "freedom", "discrimination", "constitutional remedies", "writs"],
+    "summary": "High-level guidance on equality, freedoms, protection against exploitation, religious freedom, education, and constitutional remedies.",
+    "body": "Articles 14 to 18 protect equality before law, bar discrimination on listed grounds in many public settings, and abolish untouchability and titles in the constitutional sense.\n\nArticles 19 to 22 protect core freedoms such as speech, assembly, association, movement, residence, and profession, while also recognizing criminal procedure safeguards such as being informed of grounds of arrest and access to legal counsel. These freedoms are not absolute and can be subject to reasonable restrictions created by law.\n\nArticles 23 and 24 prohibit trafficking, forced labour, and child labour in hazardous work. Articles 25 to 30 protect freedom of religion and cultural and educational rights, especially for minorities.\n\nArticle 21A recognizes free and compulsory education for children in the specified age group, and Article 32 lets a person approach the Supreme Court to enforce fundamental rights. High Courts can also be approached under Article 226 when state action violates legal or constitutional protections."
+  },
+  {
+    "id": "arrest-detention",
+    "title": "Arrest, detention, and police procedure basics",
+    "category": "Criminal procedure",
+    "jurisdiction": "India",
+    "sourceTitle": "Constitutional safeguards and criminal procedure principles",
+    "officialSource": "Constitution of India and criminal procedure framework",
+    "tags": ["arrest", "detention", "police", "lawyer", "family notification"],
+    "summary": "Emergency-oriented overview of rights during arrest or detention and immediate practical steps.",
+    "body": "A person who is arrested should be told the grounds of arrest and should be allowed to consult a lawyer. As a broad rule, the arrested person must be produced before a magistrate within 24 hours, excluding reasonable travel time.\n\nIf you are assisting someone who has been detained, record the police station name, time of detention, names or badge details if available, and the basis communicated for the arrest. Ask whether the person has been allowed to contact family and legal counsel.\n\nIn urgent detention situations, keep communications factual and non-confrontational. Ask for the case or diary reference if one exists, preserve any papers served by police, and escalate quickly to a licensed criminal lawyer or local legal aid authority if access to counsel or production before a magistrate is being delayed."
+  },
+  {
+    "id": "domestic-violence",
+    "title": "Protection from domestic violence",
+    "category": "Women's rights",
+    "jurisdiction": "India",
+    "sourceTitle": "Protection of Women from Domestic Violence Act, 2005",
+    "officialSource": "Ministry of Women and Child Development",
+    "tags": ["domestic violence", "protection order", "residence order", "custody", "women"],
+    "summary": "General information on protection orders, residence relief, monetary relief, and immediate safety steps.",
+    "body": "The Protection of Women from Domestic Violence Act, 2005 recognizes physical, sexual, verbal, emotional, and economic abuse in domestic relationships. Relief can include protection orders, residence orders, monetary relief, custody orders, and compensation.\n\nIf violence is immediate, safety comes first. Contact emergency services, move to a safer place if possible, and seek medical assistance. Preserve photographs, messages, medical records, and any witness details because early evidence often becomes important later.\n\nA survivor can approach the police, a Protection Officer, service providers, or a magistrate. Practical steps usually include documenting incidents, preserving proof of injury or threats, preparing identity and address documents, and speaking with a lawyer or support worker before signing statements you do not understand."
+  },
+  {
+    "id": "workplace-harassment",
+    "title": "Workplace harassment and complaint process",
+    "category": "Employment law",
+    "jurisdiction": "India",
+    "sourceTitle": "Sexual Harassment of Women at Workplace Act, 2013",
+    "officialSource": "Ministry of Women and Child Development",
+    "tags": ["workplace harassment", "sexual harassment", "icc", "complaint", "employment"],
+    "summary": "Overview of workplace harassment protections, complaint channels, and evidence preparation.",
+    "body": "Workplaces are expected to provide a mechanism for handling sexual harassment complaints. Many organizations use an Internal Committee process, and the law requires a structured inquiry framework.\n\nIf harassment is happening, keep a chronological record of incidents with dates, times, locations, screenshots, emails, and names of witnesses. Preserve performance records and prior reports because they may matter if retaliation becomes part of the dispute.\n\nPractical next steps often include reviewing the employer policy, submitting a written complaint, asking for acknowledgment of receipt, and escalating to external authorities or legal counsel if the internal process is ignored, biased, or retaliatory."
+  },
+  {
+    "id": "wages-employment",
+    "title": "Delayed wages, unfair deductions, and basic employment rights",
+    "category": "Employment law",
+    "jurisdiction": "India",
+    "sourceTitle": "Payment of Wages Act and wage protection principles",
+    "officialSource": "Ministry of Labour and Employment",
+    "tags": ["salary", "wages", "deductions", "employment", "labour"],
+    "summary": "General guidance on salary delays, recordkeeping, and escalation steps for workers and employees.",
+    "body": "Where wages are delayed or deductions appear unauthorized, the first step is usually to gather the appointment letter, salary slips, attendance records, bank statements, and all written communication with the employer.\n\nA worker should try to identify whether the issue is a delayed payment, a dispute over variable compensation, a termination-related withholding, or a minimum wage problem. The legal route and forum can differ depending on the employment relationship and the nature of the wages claimed.\n\nPractical escalation often starts with a written demand for payment, followed by approaching the labour department, labour commissioner, or another competent authority with supporting documents. If the amount is substantial or the employer is threatening retaliation, get tailored advice from a labour lawyer."
+  },
+  {
+    "id": "consumer-protection",
+    "title": "Consumer complaints and product or service disputes",
+    "category": "Consumer rights",
+    "jurisdiction": "India",
+    "sourceTitle": "Consumer Protection Act, 2019",
+    "officialSource": "Ministry of Consumer Affairs, Food and Public Distribution",
+    "tags": ["consumer", "defective goods", "deficient services", "refund", "complaint"],
+    "summary": "High-level guidance for refund, replacement, service deficiency, and consumer forum preparation.",
+    "body": "Consumer disputes often involve defective goods, deficient services, misleading advertisements, unfair trade practices, or refusal to honour warranties. Basic evidence usually includes invoices, receipts, service records, screenshots, and written complaints already sent to the seller or platform.\n\nBefore filing a formal complaint, many disputes benefit from a clear written demand that states the transaction details, the problem, the remedy sought, and a reasonable response deadline. Keep proof that the complaint was delivered.\n\nIf the business ignores the complaint, the next step may involve a consumer commission or other grievance mechanism depending on the issue and value involved. A strong complaint is factual, chronological, and supported by documentary proof rather than broad allegations."
+  },
+  {
+    "id": "rti-basics",
+    "title": "Right to information basics",
+    "category": "Transparency and governance",
+    "jurisdiction": "India",
+    "sourceTitle": "Right to Information Act, 2005",
+    "officialSource": "Ministry of Law and Justice",
+    "tags": ["rti", "public authority", "information request", "pio"],
+    "summary": "General guidance on drafting RTI requests and preserving timelines and records.",
+    "body": "The Right to Information Act, 2005 allows citizens to seek information from public authorities. A strong RTI request is specific, seeks existing records rather than explanations, identifies the public authority clearly, and asks for information in a practical format.\n\nBefore filing, narrow the request by time period, department, file number, or event. Vague or sweeping requests are harder to process and can delay results.\n\nKeep copies of the application, proof of payment if applicable, dispatch records, and any reply from the Public Information Officer. Appeals become easier when the original request and the response timeline are properly documented."
+  },
+  {
+    "id": "cybercrime-privacy",
+    "title": "Cybercrime, online harassment, and digital privacy",
+    "category": "Cyber law",
+    "jurisdiction": "India",
+    "sourceTitle": "Information Technology Act framework and cybercrime reporting process",
+    "officialSource": "Ministry of Electronics and Information Technology",
+    "tags": ["cybercrime", "online harassment", "privacy", "screenshots", "reporting"],
+    "summary": "General steps for preserving evidence and escalating online abuse or privacy violations.",
+    "body": "In cybercrime matters, evidence preservation is usually the first practical priority. Save screenshots, URLs, timestamps, user handles, transaction IDs, email headers, call logs, and device details before content disappears.\n\nIf money, identity documents, or intimate content are involved, act quickly. Report the issue to the relevant platform, preserve proof of reporting, and consider using the national cybercrime reporting portal or the cybercrime helpline where appropriate.\n\nAvoid editing or forwarding evidence in ways that change metadata. When the issue involves sextortion, financial fraud, or threats to physical safety, combine platform reporting with immediate police or legal escalation."
+  },
+  {
+    "id": "tenancy-housing",
+    "title": "Housing disputes, tenancy pressure, and informal eviction threats",
+    "category": "Housing",
+    "jurisdiction": "India",
+    "sourceTitle": "General tenancy and notice principles",
+    "officialSource": "Tenancy laws vary by state",
+    "tags": ["tenant", "landlord", "eviction", "rent", "notice"],
+    "summary": "High-level guidance for rent disputes, intimidation, and evidence collection in housing matters.",
+    "body": "Tenancy rights can vary by state and by the type of occupancy arrangement, but sudden lockouts, intimidation, seizure of belongings, or forced eviction without process are high-risk situations that usually require immediate documentation.\n\nPreserve the rent agreement, rent receipts, bank transfers, utility bills, WhatsApp chats, and photographs or videos showing any threats, damage, or attempts to force you out. If there was a notice, keep the full notice and envelope or delivery proof.\n\nWhen a landlord is pressuring a tenant, practical next steps often include sending a calm written response, asking for all demands in writing, avoiding cash-only undocumented payments, and getting local legal advice because the governing rent law and police response can differ substantially by state."
+  },
+  {
+    "id": "education-rights",
+    "title": "Education access, student rights, and institutional complaints",
+    "category": "Education",
+    "jurisdiction": "India",
+    "sourceTitle": "Right to Education and institutional grievance principles",
+    "officialSource": "Education-related laws and institution rules",
+    "tags": ["student", "education", "grievance", "appeal", "scholarship"],
+    "summary": "General guidance on student complaints, adverse decisions, and record preparation.",
+    "body": "Student disputes often involve fee issues, denial of records, scholarship problems, disciplinary actions, discrimination concerns, or refusal to follow institutional rules. Start by collecting the prospectus, handbook, notices, fee receipts, emails, and prior representations.\n\nA useful complaint or appeal identifies the exact decision being challenged, the policy or promise you rely on, the documents supporting your case, and the relief requested. Written records usually matter more than verbal discussions.\n\nIf the institution is not responding, escalate through the internal grievance chain first unless the situation is urgent or discriminatory. If a public authority is involved, an RTI request or a lawyer-guided notice may become useful."
+  },
+  {
+    "id": "document-drafting",
+    "title": "Complaints, legal notices, and basic drafting discipline",
+    "category": "Legal drafting",
+    "jurisdiction": "India",
+    "sourceTitle": "Practical drafting standards for citizen legal documents",
+    "officialSource": "General legal drafting practice",
+    "tags": ["drafting", "legal notice", "complaint", "chronology", "evidence"],
+    "summary": "Practical drafting rules for complaints, notices, and other first-level legal documents.",
+    "body": "A useful legal draft is factual, chronological, and specific. It should identify the people involved, the important dates, the documents supporting the facts, and the exact remedy requested.\n\nAvoid exaggeration, insults, and unsupported accusations. If you do not know a legal section, it is often safer to describe the facts clearly than to guess a section incorrectly. Keep attachments organized and label them consistently.\n\nBefore sending a complaint or notice, confirm names, addresses, dates, amounts, and deadlines. Small factual errors can weaken credibility or cause avoidable procedural disputes later."
+  }
+]

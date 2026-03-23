@@ -65,18 +65,25 @@ export function HeroSection() {
         body: JSON.stringify({ query }),
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        throw new Error("Failed to get response")
+        const serverMessage = typeof data?.error === "string" ? data.error : "Failed to get a response"
+        if (response.status === 429) {
+          throw new Error(
+            "Gemini quota/billing limit reached for this API key. Enable billing/quota in Google AI Studio, then retry.",
+          )
+        }
+        throw new Error(serverMessage)
       }
 
-      const data = await response.json()
       setChatResponse(data.response)
       setChatOpen(true)
     } catch (error) {
       console.error("Error getting chat response:", error)
       toast({
         title: "Error",
-        description: "Failed to get a response. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to get a response. Please try again.",
         variant: "destructive",
       })
     } finally {
