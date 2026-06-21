@@ -1,6 +1,6 @@
 # JusticeAlly
 
-JusticeAlly is a rebuilt Next.js legal guidance platform for Indian users. It replaces the original v0-style demo with a working full-stack architecture:
+JusticeAlly is a multilingual legal guidance platform designed for Indian users. It simplifies complex legal jargon and provides instant, context-aware legal assistance by leveraging Retrieval-Augmented Generation (RAG) to answer users' legal queries accurately and efficiently. It replaces the original v0-style demo with a working full-stack architecture:
 
 - Next.js App Router frontend and API routes
 - Firebase Authentication on the client
