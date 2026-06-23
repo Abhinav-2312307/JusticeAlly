@@ -8,6 +8,13 @@ declare global {
   var __justiceAllyMongoIndexesPromise: Promise<void> | undefined
 }
 
+const mongoClientOptions = {
+  serverSelectionTimeoutMS: 5_000,
+  connectTimeoutMS: 5_000,
+  socketTimeoutMS: 10_000,
+  maxIdleTimeMS: 60_000,
+}
+
 function deriveDatabaseName(uri: string) {
   try {
     const url = new URL(uri)
@@ -26,8 +33,13 @@ async function getMongoClient() {
   }
 
   if (!global.__justiceAllyMongoClientPromise) {
-    const client = new MongoClient(config.uri)
-    global.__justiceAllyMongoClientPromise = client.connect()
+    const client = new MongoClient(config.uri, mongoClientOptions)
+    global.__justiceAllyMongoClientPromise = client.connect().catch(async (error) => {
+      global.__justiceAllyMongoClientPromise = undefined
+      global.__justiceAllyMongoIndexesPromise = undefined
+      await client.close().catch(() => undefined)
+      throw error
+    })
   }
 
   return global.__justiceAllyMongoClientPromise
@@ -55,7 +67,10 @@ async function ensureIndexes() {
         db.collection("artifacts").createIndex({ userId: 1, updatedAt: -1 }),
         db.collection("documents").createIndex({ userId: 1, updatedAt: -1 }),
       ])
-    })()
+    })().catch((error) => {
+      global.__justiceAllyMongoIndexesPromise = undefined
+      throw error
+    })
   }
 
   await global.__justiceAllyMongoIndexesPromise

@@ -70,6 +70,14 @@ const urgencyLevels = [
   { value: "emergency", label: "Emergency" },
 ]
 
+const responseLanguages = [
+  { value: "English", label: "English" },
+  { value: "Hindi", label: "Hindi" },
+  { value: "Marathi", label: "Marathi" },
+  { value: "Gujarati", label: "Gujarati" },
+  { value: "Tamil", label: "Tamil" },
+]
+
 function messageId() {
   return `msg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
@@ -137,6 +145,7 @@ export function AssistantWorkspace({
   const [query, setQuery] = useState(initialPrompt ?? "")
   const [issueType, setIssueType] = useState(initialIssueType)
   const [urgency, setUrgency] = useState(initialUrgency)
+  const [language, setLanguage] = useState("English")
   const [conversationId, setConversationId] = useState<string | undefined>()
   const [threadList, setThreadList] = useState(initialConversations)
   const [isLoading, setIsLoading] = useState(false)
@@ -153,10 +162,11 @@ export function AssistantWorkspace({
       conversationId: conversationId ?? null,
       issueType,
       urgency,
+      language,
       messages,
       sources: latestAssistantSources,
     }
-  }, [conversationId, issueType, latestAssistantSources, messages, urgency])
+  }, [conversationId, issueType, language, latestAssistantSources, messages, urgency])
 
   function startNewConversation() {
     setConversationId(undefined)
@@ -216,6 +226,7 @@ export function AssistantWorkspace({
           conversationId,
           issueType,
           urgency,
+          language,
         }),
       })
 
@@ -425,6 +436,21 @@ export function AssistantWorkspace({
                     </SelectContent>
                   </Select>
                 </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Answer language</p>
+                  <Select value={language} onValueChange={setLanguage}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {responseLanguages.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -451,6 +477,7 @@ export function AssistantWorkspace({
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Issue: {issueType}</Badge>
                   <Badge variant="outline">Urgency: {urgency}</Badge>
+                  <Badge variant="outline">Language: {language}</Badge>
                   <Badge variant="outline">{conversationId ? "Saved thread" : "Unsaved draft"}</Badge>
                 </div>
               </CardHeader>

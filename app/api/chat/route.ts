@@ -9,6 +9,7 @@ const requestSchema = z.object({
   conversationId: z.string().optional(),
   issueType: z.string().optional(),
   urgency: z.string().optional(),
+  language: z.enum(["English", "Hindi", "Marathi", "Gujarati", "Tamil"]).optional(),
 })
 
 export async function POST(request: Request) {
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
       conversationId: body.conversationId,
       issueType: body.issueType ?? "general",
       urgency: body.urgency ?? "normal",
+      language: body.language ?? "English",
     })
 
     return NextResponse.json({

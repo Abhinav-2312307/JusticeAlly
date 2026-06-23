@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useMemo, useState } from "react"
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
@@ -27,6 +27,48 @@ interface AuthPanelProps {
   nextPath?: string
 }
 
+function getAuthErrorMessage(error: unknown, fallback: string) {
+  const firebaseMessages: Record<string, string> = {
+    "auth/operation-not-allowed":
+      "This sign-in method is disabled in Firebase. Enable it under Firebase Console → Authentication → Sign-in method.",
+    "auth/popup-blocked": "The Google sign-in popup was blocked by your browser. Allow popups and try again.",
+    "auth/popup-closed-by-user": "The Google sign-in popup was closed before authentication finished.",
+    "auth/unauthorized-domain":
+      "This domain is not authorized in Firebase. Add it under Authentication → Settings → Authorized domains.",
+    "auth/invalid-api-key": "The configured Firebase API key is invalid.",
+    "auth/network-request-failed": "Firebase could not be reached. Check your internet connection and try again.",
+    PASSWORD_LOGIN_DISABLED:
+      "Email/password authentication is disabled in Firebase. Enable it under Authentication → Sign-in method.",
+  }
+
+  function messageForCode(code: string) {
+    return firebaseMessages[code] ?? firebaseMessages[code.replace(/^Firebase: Error \((.+)\)\.?$/, "$1")]
+  }
+
+  if (error instanceof Error && error.message) {
+    const candidate = error as Error & { code?: string }
+    return (candidate.code && messageForCode(candidate.code)) || messageForCode(error.message) || error.message
+  }
+
+  if (error instanceof Event) {
+    return "Firebase authentication could not reach the browser sign-in service. Check pop-up blocking, authorized domains, and your network connection."
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const candidate = error as { code?: unknown; message?: unknown }
+
+    if (typeof candidate.message === "string" && candidate.message) {
+      return messageForCode(candidate.message) || candidate.message
+    }
+
+    if (typeof candidate.code === "string" && candidate.code) {
+      return messageForCode(candidate.code) || candidate.code
+    }
+  }
+
+  return fallback
+}
+
 async function persistSession(idToken: string) {
   const response = await fetch("/api/auth/session", {
     method: "POST",
@@ -46,12 +88,31 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
   const auth = useMemo(() => getFirebaseClientAuth(), [])
   const router = useRouter()
   const { toast } = useToast()
+  const authActionActive = useRef(false)
 
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    function handleAuthRejection(event: PromiseRejectionEvent) {
+      if (!authActionActive.current || !(event.reason instanceof Event)) {
+        return
+      }
+
+      event.preventDefault()
+      toast({
+        title: "Authentication connection failed",
+        description: getAuthErrorMessage(event.reason, "Could not connect to Firebase Authentication."),
+        variant: "destructive",
+      })
+    }
+
+    window.addEventListener("unhandledrejection", handleAuthRejection)
+    return () => window.removeEventListener("unhandledrejection", handleAuthRejection)
+  }, [toast])
 
   const content = {
     login: {
@@ -91,6 +152,7 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    authActionActive.current = true
     setIsLoading(true)
 
     try {
@@ -99,10 +161,11 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
     } catch (error) {
       toast({
         title: "Could not sign in",
-        description: error instanceof Error ? error.message : "Please check your email and password.",
+        description: getAuthErrorMessage(error, "Please check your email and password."),
         variant: "destructive",
       })
     } finally {
+      authActionActive.current = false
       setIsLoading(false)
     }
   }
@@ -119,6 +182,7 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
       return
     }
 
+    authActionActive.current = true
     setIsLoading(true)
 
     try {
@@ -134,15 +198,17 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
     } catch (error) {
       toast({
         title: "Could not create account",
-        description: error instanceof Error ? error.message : "Try again with a different email address.",
+        description: getAuthErrorMessage(error, "Try again with a different email address."),
         variant: "destructive",
       })
     } finally {
+      authActionActive.current = false
       setIsLoading(false)
     }
   }
 
   async function handleGoogleAuth() {
+    authActionActive.current = true
     setIsLoading(true)
 
     try {
@@ -164,16 +230,18 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
     } catch (error) {
       toast({
         title: "Google sign-in failed",
-        description: error instanceof Error ? error.message : "Try again in a moment.",
+        description: getAuthErrorMessage(error, "Try again in a moment."),
         variant: "destructive",
       })
     } finally {
+      authActionActive.current = false
       setIsLoading(false)
     }
   }
 
   async function handleReset(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    authActionActive.current = true
     setIsLoading(true)
 
     try {
@@ -186,10 +254,11 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
     } catch (error) {
       toast({
         title: "Could not send reset email",
-        description: error instanceof Error ? error.message : "Please check the email address and try again.",
+        description: getAuthErrorMessage(error, "Please check the email address and try again."),
         variant: "destructive",
       })
     } finally {
+      authActionActive.current = false
       setIsLoading(false)
     }
   }

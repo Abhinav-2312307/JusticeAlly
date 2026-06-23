@@ -46,10 +46,12 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
+    overflow-x: hidden;
     font-family: var(--font-body), sans-serif;
     background-image:
       radial-gradient(circle at top, rgba(187, 148, 87, 0.18), transparent 30%),
@@ -82,5 +84,47 @@
 
   .page-section {
     @apply py-14 md:py-20;
+  }
+
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(125, 211, 252, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(125, 211, 252, 0.055) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: linear-gradient(to bottom, black, transparent 92%);
+  }
+
+  .hero-float {
+    animation: hero-float 6s ease-in-out infinite;
+  }
+
+  .hero-scan {
+    animation: hero-scan 2.2s ease-in-out infinite;
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes hero-scan {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(210%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-float,
+  .hero-scan {
+    animation: none;
   }
 }

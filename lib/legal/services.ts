@@ -22,6 +22,7 @@ const assistantInputSchema = z.object({
   conversationId: z.string().optional(),
   issueType: z.string().default("general"),
   urgency: z.string().default("normal"),
+  language: z.enum(["English", "Hindi", "Marathi", "Gujarati", "Tamil"]).default("English"),
 })
 
 const simplifyInputSchema = z.object({
@@ -91,6 +92,7 @@ export async function answerLegalQuestion(input: z.infer<typeof assistantInputSc
       query: data.query,
       issueType: data.issueType,
       urgency: data.urgency,
+      language: data.language,
       history: trimHistory(history),
       sources,
     }),
@@ -100,25 +102,37 @@ export async function answerLegalQuestion(input: z.infer<typeof assistantInputSc
     },
   )
 
-  const saved = await saveConversationTurn({
-    userId: data.userId,
-    conversationId: data.conversationId,
-    title: deriveConversationTitle(data.query),
-    issueType: data.issueType,
-    urgency: data.urgency,
-    userMessage: data.query,
-    assistantMessage: answer,
-    sources: sources.map((source) => ({
-      id: source.id,
-      title: source.title,
-      sourceTitle: source.sourceTitle,
-      excerpt: source.excerpt,
-    })),
-  })
+  let savedConversationId = data.conversationId
+
+  try {
+    const saved = await saveConversationTurn({
+      userId: data.userId,
+      conversationId: data.conversationId,
+      title: deriveConversationTitle(data.query),
+      issueType: data.issueType,
+      urgency: data.urgency,
+      userMessage: data.query,
+      assistantMessage: answer,
+      sources: sources.map((source) => ({
+        id: source.id,
+        title: source.title,
+        sourceTitle: source.sourceTitle,
+        excerpt: source.excerpt,
+      })),
+    })
+
+    savedConversationId = saved.conversationId
+  } catch (error) {
+    console.warn(
+      `[legal-assistant] Could not save conversation turn. Returning generated answer without persistence. ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    )
+  }
 
   return {
     answer,
-    conversationId: saved.conversationId,
+    conversationId: savedConversationId,
     sources: sources.map((source) => ({
       id: source.id,
       title: source.title,

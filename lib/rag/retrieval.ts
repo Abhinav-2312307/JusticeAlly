@@ -95,10 +95,20 @@ export function getLocalKnowledgeBaseStatus() {
 export async function retrieveRelevantKnowledge(query: string, limit = 5): Promise<RetrievedChunk[]> {
   const storedChunks = await listKnowledgeChunks()
   const sourceChunks = storedChunks.length > 0 ? storedChunks : localChunks
-  const queryEmbedding = await embedText(query, {
-    taskType: "RETRIEVAL_QUERY",
-    outputDimensionality: 768,
-  })
+  let queryEmbedding: number[] = []
+
+  try {
+    queryEmbedding = await embedText(query, {
+      taskType: "RETRIEVAL_QUERY",
+      outputDimensionality: 768,
+    })
+  } catch (error) {
+    console.warn(
+      `[rag] Query embedding unavailable. Falling back to lexical retrieval. ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    )
+  }
 
   const lexicalCandidates = [...sourceChunks]
     .map((chunk) => ({
@@ -111,14 +121,27 @@ export async function retrieveRelevantKnowledge(query: string, limit = 5): Promi
   const scored: RetrievedChunk[] = []
 
   for (const candidate of lexicalCandidates) {
-    const embedding =
-      storedChunks.length > 0
-        ? candidate.chunk.embedding ?? []
-        : await ensureLocalChunkEmbedding(candidate.chunk)
+    let embedding: number[] = []
+
+    if (queryEmbedding.length > 0) {
+      try {
+        embedding =
+          storedChunks.length > 0
+            ? candidate.chunk.embedding ?? []
+            : await ensureLocalChunkEmbedding(candidate.chunk)
+      } catch (error) {
+        console.warn(
+          `[rag] Document embedding unavailable for ${candidate.chunk.id}. Using lexical score. ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        )
+      }
+    }
+
     const semantic = embedding.length > 0 ? cosineSimilarity(queryEmbedding, embedding) : 0
     const score = semantic > 0 ? semantic * 0.82 + candidate.lexical * 0.18 : candidate.lexical
 
-    if (score > 0.05) {
+    if (score > 0.05 || scored.length < limit) {
       scored.push({
         ...candidate.chunk,
         score,
