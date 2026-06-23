@@ -1,6 +1,6 @@
 # JusticeAlly
 
-JusticeAlly is an AI-assisted legal guidance workspace for Indian users. It helps people understand legal issues in plain language, chat with legal documents, generate first-draft legal documents, browse rights resources, and keep their work organized in one authenticated workspace.
+JusticeAlly is a multilingual AI legal guidance workspace for Indian users. It helps people understand legal issues in plain language, chat with legal documents, generate first-draft legal documents, browse rights resources, and keep their work organized in one authenticated workspace.
 
 The app is built as a full-stack Next.js product with Firebase authentication, server sessions, Cloudinary-backed document storage, Gemini-powered AI workflows, and a local legal corpus for retrieval-augmented responses.
 
