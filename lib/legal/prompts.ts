@@ -6,6 +6,7 @@ interface AssistantPromptInput {
   query: string
   issueType: string
   urgency: string
+  language: string
   history: ConversationMessage[]
   sources: RetrievedChunk[]
 }
@@ -32,12 +33,15 @@ Do not cite laws, sections, timelines, remedies, or authorities that are not sup
 Do not invent procedural certainty. If state-specific practice may vary, say so.
 
 Response format:
-1. Start with a short situation summary in plain English.
+1. Start with a short situation summary in the selected response language.
 2. Explain the user's likely rights or legal position.
 3. Give practical next steps as a numbered list.
 4. List the evidence or documents they should gather.
 5. End with a short note on when to contact emergency services or a licensed lawyer.
 6. Add a final line titled "Grounding note" that says whether the answer was strongly supported by retrieved sources or whether some uncertainty remains.
+
+Selected response language: ${input.language}
+Write the full answer in the selected response language. Keep legal names, act names, section names, court names, and source titles in English when translating them would reduce clarity. If the selected language is English, answer in English.
 
 Keep the answer precise, calm, and useful. Avoid bold markdown and avoid inflated legal language.
 

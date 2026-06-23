@@ -23,8 +23,8 @@ export async function SiteHeader() {
             <Scale className="h-5 w-5" />
           </div>
           <div>
-            <p className="font-display text-2xl font-semibold leading-none">JusticeAlly</p>
-            <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Legal guidance platform</p>
+            <p className="font-display text-2xl font-semibold leading-tight">JusticeAlly</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">AI Legal Companion</p>
           </div>
         </Link>
 

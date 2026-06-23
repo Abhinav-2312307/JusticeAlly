@@ -1,98 +1,134 @@
 # JusticeAlly
 
-JusticeAlly is a multilingual legal guidance platform designed for Indian users. It simplifies complex legal jargon and provides instant, context-aware legal assistance by leveraging Retrieval-Augmented Generation (RAG) to answer users' legal queries accurately and efficiently. It replaces the original v0-style demo with a working full-stack architecture:
+JusticeAlly is an AI-assisted legal guidance workspace for Indian users. It helps people understand legal issues in plain language, chat with legal documents, generate first-draft legal documents, browse rights resources, and keep their work organized in one authenticated workspace.
 
-- Next.js App Router frontend and API routes
-- Firebase Authentication on the client
-- Firebase Admin session cookies on the server, with a signed-cookie fallback when only Firebase web auth is configured
-- Firestore persistence for conversations and saved artifacts
-- Cloudinary document vault storage for uploaded user files
-- Gemini generation for assistant, simplification, and drafting
-- RAG retrieval against a chunked legal knowledge corpus
+The app is built as a full-stack Next.js product with Firebase authentication, server sessions, Cloudinary-backed document storage, Gemini-powered AI workflows, and a local legal corpus for retrieval-augmented responses.
 
-## Stack
+## Features
 
-- `Next.js 15`
-- `React 19`
-- `Tailwind CSS`
-- `Firebase` + `firebase-admin`
-- `Gemini API`
+- AI legal assistant with source-aware guidance for common Indian legal questions
+- Document chat for uploaded legal files, notices, contracts, FIRs, and agreements
+- Document simplification with plain-language summaries and follow-up Q&A
+- Draft studio for complaints, notices, RTIs, and structured legal drafts
+- Rights and legal library resources backed by curated local content
+- Legal aid directory and emergency guidance flows
+- Authenticated workspace for saved conversations, outputs, and document metadata
+- Email-password and Google authentication through Firebase
+- Server-side session handling with Firebase Admin cookies or signed-session fallback
+- Cloudinary document vault integration for uploaded user files
+- Responsive landing, tool, resource, auth, and workspace pages
 
-## Environment
+## Tech Stack
 
-Copy `.env.example` to `.env.local` and fill in:
+- Framework: Next.js 15 App Router
+- UI: React 19, TypeScript, Tailwind CSS
+- Components: Radix UI primitives, shadcn-style components, Lucide icons
+- Forms and validation: React Hook Form, Zod
+- Authentication: Firebase Auth
+- Server auth: Firebase Admin SDK, HTTP-only session cookies
+- Database: Firestore plus optional MongoDB integration
+- File storage: Cloudinary
+- AI: Google Gemini API
+- Document parsing: Mammoth, PDF tooling through `pdfjs-dist`
+- Search and local resources: curated JSON legal corpus and Fuse.js
 
-- `GEMINI_API_KEY`
-- `NEXT_PUBLIC_FIREBASE_API_KEY`
-- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
-- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
-- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
-- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
-- `NEXT_PUBLIC_FIREBASE_APP_ID`
-- `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
-- `FIREBASE_ADMIN_PROJECT_ID`
-- `FIREBASE_ADMIN_CLIENT_EMAIL`
-- `FIREBASE_ADMIN_PRIVATE_KEY`
-- `SESSION_COOKIE_NAME`
-- `SESSION_SECRET`
-- `CLOUDINARY_CLOUD_NAME`
-- `CLOUDINARY_API_KEY`
-- `CLOUDINARY_API_SECRET`
-- `CLOUDINARY_FOLDER`
+## Project Structure
 
-## Local development
+```text
+app/                         Next.js routes and API handlers
+components/                  Shared UI, auth, legal workflow, and layout components
+content/                     Local legal corpus and directory JSON data
+hooks/                       Shared React hooks
+lib/                         Auth, Firebase, AI, legal, RAG, document, and DB utilities
+public/assets/pdfs/          Legal resource PDFs
+scripts/                     Utility scripts such as knowledge seeding
+styles/                      Global style entry points
+```
 
-1. Install dependencies:
+## Main Routes
+
+- `/` - public landing page
+- `/login`, `/signup`, `/forgot-password` - account access
+- `/workspace` - authenticated user workspace
+- `/tools/legal-assistant` - AI legal assistant
+- `/tools/document-simplifier` - document chat and simplification
+- `/tools/document-generator` - legal draft studio
+- `/resources/legal-library` - searchable legal resources
+- `/resources/know-your-rights` - rights guide
+- `/resources/templates` - document templates
+- `/resources/directory` - legal aid directory
+- `/emergency` - urgent legal guidance
+- `/api-guide` - API and integration overview
+
+## Environment Setup
+
+Environment files are intentionally ignored by Git. Start from the example file:
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in the values needed for the features you want to run:
+
+- Firebase web config for client authentication
+- Firebase Admin credentials for secure server sessions
+- `GEMINI_API_KEY` for AI assistant, document, and draft workflows
+- Cloudinary credentials for uploaded document storage
+- `SESSION_SECRET` with at least 32 characters when using signed-session fallback
+- Optional MongoDB values if using the MongoDB-backed paths
+
+Never commit `.env`, `.env.local`, or any secret-bearing environment file.
+
+## Local Development
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Seed the Firestore knowledge base:
-
-```bash
-npm run seed:knowledge
-```
-
-3. Start the app:
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-## Main routes
+Open `http://localhost:3000`.
 
-- `/` marketing landing
-- `/login`, `/signup`, `/forgot-password`
-- `/workspace`
-- `/tools/legal-assistant`
-- `/tools/document-simplifier`
-- `/tools/document-generator`
-- `/resources/legal-library`
-- `/resources/directory`
-- `/resources/templates`
-- `/resources/rights-guide`
-- `/emergency`
-- `/api-guide`
+Run type checking:
 
-## Auth and storage
+```bash
+npm run typecheck
+```
 
-- Email/password, Google, and phone OTP sign-in are wired through Firebase Authentication.
-- Successful login creates an HTTP-only workspace session.
-- If Firebase Admin credentials are present, the app uses Firebase session cookies.
-- If Firebase Admin is not configured, the app can still create signed sessions with `SESSION_SECRET`.
-- User profile details, conversations, saved outputs, and uploaded document metadata are stored in Firestore.
-- Raw user documents are uploaded to Cloudinary and linked back into the workspace vault.
+Create a production build:
 
-## RAG flow
+```bash
+npm run build
+```
 
-1. The seed corpus lives in [`content/legal-corpus.json`](/Users/abhinavsahu/Desktop/Project/justiceAlly/JusticeAlly/content/legal-corpus.json).
-2. The seeding script chunks documents and stores embeddings in Firestore `knowledgeChunks`.
-3. `/api/chat` embeds the user query, retrieves relevant chunks, builds a grounded prompt, calls Gemini, then stores the result.
-4. The UI renders both the answer and the retrieved source cards.
+Seed the legal knowledge base when Firestore is configured:
 
-## Notes
+```bash
+npm run seed:knowledge
+```
 
-- The included corpus is a starter knowledge base, not a comprehensive law library.
-- The platform is India-focused because the existing product content and legal workflows were India-specific.
-- The app provides general legal information and drafting support. It does not replace a licensed advocate reviewing the exact facts.
+## Workflow
+
+1. A user signs in with email-password or Google.
+2. The server creates a secure session through Firebase Admin or a signed fallback session.
+3. The user asks a legal question, uploads a document, or starts a draft.
+4. API routes validate input, retrieve relevant local legal context where applicable, and call Gemini.
+5. Responses, generated artifacts, and uploaded document metadata are saved to the user workspace.
+6. The user can return to the workspace to continue, export, or reuse previous work.
+
+## GitHub Readiness Notes
+
+- `.env`, `.env.local`, and local env variants are ignored.
+- `.env.example` documents required configuration without secrets.
+- Build artifacts, dependency folders, debug logs, and TypeScript cache files are ignored.
+- The README avoids local machine paths and documents setup from a fresh clone.
+
+## Legal Disclaimer
+
+JusticeAlly provides general legal information and drafting assistance. It is not a substitute for advice from a licensed advocate who has reviewed the exact facts, documents, jurisdiction, and urgency of a matter.

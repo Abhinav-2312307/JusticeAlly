@@ -30,18 +30,11 @@ export async function POST(request: Request) {
     const expiresIn = 1000 * 60 * 60 * 24 * 5
     const cookieStore = await cookies()
     let user
+    let sessionCookie
 
     if (adminAuth) {
       const decoded = await adminAuth.verifyIdToken(payload.idToken)
-      const sessionCookie = await adminAuth.createSessionCookie(payload.idToken, { expiresIn })
-
-      cookieStore.set(getSessionCookieName(), sessionCookie, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: expiresIn / 1000,
-      })
+      sessionCookie = await adminAuth.createSessionCookie(payload.idToken, { expiresIn })
 
       user = {
         uid: decoded.uid,
@@ -53,18 +46,18 @@ export async function POST(request: Request) {
       }
     } else {
       user = await lookupFirebaseUserByIdToken(payload.idToken)
-      const sessionCookie = createSignedSessionCookie(user, expiresIn / 1000)
-
-      cookieStore.set(getSessionCookieName(), sessionCookie, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: expiresIn / 1000,
-      })
+      sessionCookie = createSignedSessionCookie(user, expiresIn / 1000)
     }
 
     await upsertUserProfile(user)
+
+    cookieStore.set(getSessionCookieName(), sessionCookie, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: expiresIn / 1000,
+    })
 
     return NextResponse.json({ ok: true, user })
   } catch (error) {

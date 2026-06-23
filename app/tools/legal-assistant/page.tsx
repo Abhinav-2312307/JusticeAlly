@@ -1,5 +1,5 @@
 import { requireSessionUser } from "@/lib/auth"
-import { listUserConversations, upsertUserProfile } from "@/lib/db"
+import { listUserConversations } from "@/lib/db"
 import { AssistantWorkspace } from "@/components/legal/assistant-workspace"
 
 interface LegalAssistantPageProps {
@@ -9,8 +9,10 @@ interface LegalAssistantPageProps {
 export default async function LegalAssistantPage({ searchParams }: LegalAssistantPageProps) {
   const params = searchParams ? await searchParams : undefined
   const user = await requireSessionUser("/tools/legal-assistant")
-  await upsertUserProfile(user)
-  const initialConversations = await listUserConversations(user.uid, 5)
+  const initialConversations = await listUserConversations(user.uid, 5).catch((error) => {
+    console.error("[legal-assistant] Could not load saved conversations.", error)
+    return []
+  })
   const promptValue = params?.prompt
   const issueValue = params?.issue
   const urgencyValue = params?.urgency
