@@ -146,8 +146,7 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
       description,
     })
 
-    router.push(nextPath)
-    router.refresh()
+    window.location.href = nextPath
   }
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
@@ -400,10 +399,7 @@ export function AuthPanel({ mode, nextPath = "/workspace" }: AuthPanelProps) {
                     By continuing you agree to the platform terms and acknowledge that JusticeAlly provides general legal
                     information, not representation.
                   </p>
-                  <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/70 p-4 text-sm text-emerald-950">
-                    Phone-number OTP sign-in has been removed. Account access is now handled through email-password and
-                    Google only.
-                  </div>
+
                 </form>
               )}
 

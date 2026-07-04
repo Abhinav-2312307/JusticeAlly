@@ -30,8 +30,7 @@ export function SignOutButton({ className }: SignOutButtonProps) {
         await signOut(auth)
       }
 
-      router.push("/")
-      router.refresh()
+      window.location.href = "/"
     } finally {
       setIsLoading(false)
     }
