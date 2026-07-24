@@ -24,9 +24,9 @@ The app is built as a full-stack Next.js product with Firebase authentication, s
 - UI: React 19, TypeScript, Tailwind CSS
 - Components: Radix UI primitives, shadcn-style components, Lucide icons
 - Forms and validation: React Hook Form, Zod
+- Database: Firestore plus optional MongoDB integration
 - Authentication: Firebase Auth
 - Server auth: Firebase Admin SDK, HTTP-only session cookies
-- Database: Firestore plus optional MongoDB integration
 - File storage: Cloudinary
 - AI: Google Gemini API
 - Document parsing: Mammoth, PDF tooling through `pdfjs-dist`
