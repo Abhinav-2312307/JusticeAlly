@@ -122,6 +122,13 @@ npm run seed:knowledge
 5. Responses, generated artifacts, and uploaded document metadata are saved to the user workspace.
 6. The user can return to the workspace to continue, export, or reuse previous work.
 
+## Use Cases
+- A tenant simplifying rental agreements before signing.
+- A student drafting an RTI application for exam revaluation.
+- An employee understanding workplace rights in plain language.
+- A citizen generating a first draft of a police complaint.
+
+
 ## GitHub Readiness Notes
 
 - `.env`, `.env.local`, and local env variants are ignored.
