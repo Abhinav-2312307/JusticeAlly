@@ -24,9 +24,9 @@ The app is built as a full-stack Next.js product with Firebase authentication, s
 - UI: React 19, TypeScript, Tailwind CSS
 - Components: Radix UI primitives, shadcn-style components, Lucide icons
 - Forms and validation: React Hook Form, Zod
+- Database: Firestore plus optional MongoDB integration
 - Authentication: Firebase Auth
 - Server auth: Firebase Admin SDK, HTTP-only session cookies
-- Database: Firestore plus optional MongoDB integration
 - File storage: Cloudinary
 - AI: Google Gemini API
 - Document parsing: Mammoth, PDF tooling through `pdfjs-dist`
@@ -121,6 +121,13 @@ npm run seed:knowledge
 4. API routes validate input, retrieve relevant local legal context where applicable, and call Gemini.
 5. Responses, generated artifacts, and uploaded document metadata are saved to the user workspace.
 6. The user can return to the workspace to continue, export, or reuse previous work.
+
+## Use Cases
+- A tenant simplifying rental agreements before signing.
+- A student drafting an RTI application for exam revaluation.
+- An employee understanding workplace rights in plain language.
+- A citizen generating a first draft of a police complaint.
+
 
 ## GitHub Readiness Notes
 
